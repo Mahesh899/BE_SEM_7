@@ -1,0 +1,71 @@
+//Design 8-Queens matrix having first Queen placed. Use backtracking to place remaining
+Queens to generate the final 8-queen’s matrix
+#include <iostream>
+#include <vector>
+using namespace std;
+
+#define N 8 // The size of the chessboard (8x8)
+
+// Function to print the board
+void printBoard(vector<int>& board) {
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            if (board[i] == j)
+                cout << "Q "; // 'Q' represents a queen
+            else
+                cout << ". "; // '.' represents an empty space
+        }
+        cout << endl;
+    }
+}
+
+// Function to check if it's safe to place a queen at position (row, col)
+bool isSafe(int row, int col, vector<int>& board) {
+    // Check the previous rows
+    for (int i = 0; i < row; i++) {
+        // Check if the column is already occupied or if the diagonals are attacked
+        if (board[i] == col || 
+            board[i] - i == col - row || 
+            board[i] + i == col + row) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Backtracking function to solve the 8-Queens problem
+bool solveQueens(int row, vector<int>& board) {
+    // Base case: If all queens are placed
+    if (row == N) {
+        printBoard(board);
+        return true;
+    }
+
+    bool result = false;
+    // Try placing the queen in all columns for the current row
+    for (int col = 0; col < N; col++) {
+        if (isSafe(row, col, board)) {
+            board[row] = col; // Place the queen
+            result = solveQueens(row + 1, board); // Recur to place next queen
+            if (result) {
+                return true; // If placing the queen leads to a solution, return true
+            }
+            board[row] = -1; // Backtrack: Remove the queen
+        }
+    }
+    return false; // No valid position found for the current queen
+}
+
+int main() {
+    vector<int> board(N, -1); // Initialize board with -1, indicating no queen is placed
+
+    // Place the first queen in a specific position (e.g., row 0, column 0)
+    board[0] = 0;
+
+    // Call the solve function starting from row 1
+    if (!solveQueens(1, board)) {
+        cout << "No solution found!" << endl;
+    }
+
+    return 0;
+}

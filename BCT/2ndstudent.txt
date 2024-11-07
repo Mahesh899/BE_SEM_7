@@ -1,0 +1,54 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract StudentData {
+
+    // Define a structure to store student information
+    struct Student {
+        string name;
+        uint age;
+        uint grade;
+    }
+
+    // Create an array of students to store multiple students' data
+    Student[] public students;
+
+    // Event to emit when a new student is added
+    event StudentAdded(string name, uint age, uint grade);
+
+    // Function to add a new student to the array
+    function addStudent(string memory _name, uint _age, uint _grade) public {
+        // Create a new student and push it to the students array
+        students.push(Student(_name, _age, _grade));
+        
+        // Emit an event when a student is added
+        emit StudentAdded(_name, _age, _grade);
+    }
+
+    // Function to get the number of students in the array
+    function getStudentCount() public view returns (uint) {
+        return students.length;
+    }
+
+    // Function to get a student's details by index
+    function getStudent(uint index) public view returns (string memory name, uint age, uint grade) {
+        require(index < students.length, "Student does not exist.");
+        Student memory student = students[index];
+        return (student.name, student.age, student.grade);
+    }
+
+    // Fallback function that is triggered when ether is sent to the contract
+    fallback() external payable {
+        // Fallback function does not need to return anything
+        // You could store ether or perform any custom logic here if required
+    }
+
+    // Event to emit when ether is received by the contract (optional)
+    event EtherReceived(address sender, uint amount);
+
+    // Function to receive ether (could be used alongside the fallback function)
+    receive() external payable {
+        // Log the reception of ether
+        emit EtherReceived(msg.sender, msg.value);
+    }
+}

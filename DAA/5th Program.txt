@@ -1,0 +1,63 @@
+//5. Write a program to generate binomial coefficients using dynamic programming.
+#include <iostream>
+#include <vector>
+using namespace std;
+
+// Function to generate binomial coefficients using Dynamic Programming
+vector<vector<int>> generateBinomialCoefficients(int n) {
+    // Create a 2D array to store binomial coefficients
+    vector<vector<int>> dp(n + 1, vector<int>(n + 1, 0));
+
+    // Fill the DP table using the recursive relation of Pascal's Triangle
+    for (int i = 0; i <= n; i++) {
+        for (int j = 0; j <= i; j++) {
+            if (j == 0 || j == i) {
+                dp[i][j] = 1;  // Base cases: C(n, 0) = 1 and C(n, n) = 1
+            } else {
+                dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];  // Pascal's relation
+            }
+        }
+    }
+
+    return dp;
+}
+
+// Function to print the binomial coefficients (Pascal's Triangle)
+void printBinomialCoefficients(int n) {
+    vector<vector<int>> dp = generateBinomialCoefficients(n);
+
+    // Print the binomial coefficients in Pascal's Triangle format
+    for (int i = 0; i <= n; i++) {
+        for (int j = 0; j <= i; j++) {
+            cout << dp[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+
+int main() {
+    int n;
+
+    // Input: number of rows for Pascal's Triangle
+    cout << "Enter the value of n: ";
+    cin >> n;
+
+    // Print binomial coefficients using Pascal's Triangle
+    cout << "Binomial Coefficients (Pascal's Triangle) up to row " << n << ":\n";
+    printBinomialCoefficients(n);
+
+    return 0;
+}
+=============================
+
+/tmp/bOzM0hnuNi.o
+Enter the value of n: 4
+Binomial Coefficients (Pascal's Triangle) up to row 4:
+1 
+1 1 
+1 2 1 
+1 3 3 1 
+1 4 6 4 1 
+
+
+=== Code Execution Successful ===

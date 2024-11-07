@@ -1,0 +1,71 @@
+//3. Write a program to solve a fractional Knapsack problem using a greedy method.
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+// Structure to represent each item
+struct Item {
+    int weight;
+    int value;
+    double ratio; // value/weight ratio
+};
+
+// Function to calculate the maximum value we can get in the knapsack
+double fractionalKnapsack(int capacity, vector<Item>& items, int n) {
+    // Step 1: Calculate value/weight ratio for each item
+    for (int i = 0; i < n; i++) {
+        items[i].ratio = (double)items[i].value / items[i].weight;
+    }
+
+    // Step 2: Sort items based on value/weight ratio in descending order
+    sort(items.begin(), items.end(), [](Item a, Item b) {
+        return a.ratio > b.ratio;
+    });
+
+    double totalValue = 0.0; // This will store the total value we can carry in the knapsack
+
+    // Step 3: Try to fill the knapsack with the sorted items
+    for (int i = 0; i < n; i++) {
+        if (capacity == 0) break; // If knapsack is full, stop
+
+        if (items[i].weight <= capacity) {
+            // If the item can fit completely, take it
+            capacity -= items[i].weight;
+            totalValue += items[i].value;
+        } else {
+            // If the item can't fit completely, take the fraction of it
+            totalValue += items[i].value * ((double)capacity / items[i].weight);
+            capacity = 0; // Knapsack is now full
+        }
+    }
+
+    return totalValue;
+}
+
+int main() {
+    int n, capacity;
+
+    // Input: number of items and knapsack capacity
+    cout << "Enter number of items: ";
+    cin >> n;
+    cout << "Enter the capacity of the knapsack: ";
+    cin >> capacity;
+
+    vector<Item> items(n);
+
+    // Input: weight and value for each item
+    cout << "Enter weight and value for each item (weight value):\n";
+    for (int i = 0; i < n; i++) {
+        cin >> items[i].weight >> items[i].value;
+    }
+
+    // Calculate the maximum value that can be carried in the knapsack
+    double maxValue = fractionalKnapsack(capacity, items, n);
+
+    // Output the result
+    cout << "Maximum value in Knapsack = " << maxValue << endl;
+
+    return 0;
+}

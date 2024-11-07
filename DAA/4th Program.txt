@@ -1,0 +1,69 @@
+//Write a program to solve a 0-1 Knapsack problem using dynamic programming or branch and
+bound strategy.
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+// Function to solve the 0-1 Knapsack problem using Dynamic Programming
+int knapsack(int W, vector<int>& weights, vector<int>& values, int n) {
+    // Create a 2D DP array, where dp[i][w] will store the maximum value
+    // for the first i items and capacity w.
+    vector<vector<int>> dp(n + 1, vector<int>(W + 1, 0));
+
+    // Build the DP table in bottom-up manner
+    for (int i = 1; i <= n; i++) {
+        for (int w = 1; w <= W; w++) {
+            if (weights[i - 1] <= w) {
+                // If the item can be included, check if including it results in a higher value
+                dp[i][w] = max(dp[i - 1][w], values[i - 1] + dp[i - 1][w - weights[i - 1]]);
+            } else {
+                // Otherwise, don't include the item
+                dp[i][w] = dp[i - 1][w];
+            }
+        }
+    }
+
+    // The maximum value is stored in dp[n][W]
+    return dp[n][W];
+}
+
+int main() {
+    int n, W;
+
+    // Input: number of items and the capacity of the knapsack
+    cout << "Enter the number of items: ";
+    cin >> n;
+    cout << "Enter the capacity of the knapsack: ";
+    cin >> W;
+
+    vector<int> weights(n);
+    vector<int> values(n);
+
+    // Input: weight and value of each item
+    cout << "Enter the weights and values of each item (weight value):\n";
+    for (int i = 0; i < n; i++) {
+        cin >> weights[i] >> values[i];
+    }
+
+    // Solve the 0-1 knapsack problem and print the result
+    int maxValue = knapsack(W, weights, values, n);
+    cout << "Maximum value in the knapsack: " << maxValue << endl;
+
+    return 0;
+}
+
+
+=====================================================
+output
+Enter the number of items: 4
+Enter the capacity of the knapsack: 50
+Enter the weights and values of each item (weight value):
+10 60 
+20 100
+30 180
+40 80
+Maximum value in the knapsack: 280
+
+
+=== Code Execution Successful ===

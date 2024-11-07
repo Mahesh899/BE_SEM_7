@@ -1,0 +1,37 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract MarksArray {
+
+    // Declare an array to store marks
+    uint[] public marks;
+
+    // Event to emit when marks are added
+    event MarksAdded(uint[] marks);
+
+    // Function to accept an array of marks
+    function acceptMarks(uint[] memory _marks) public {
+        // Store the marks in the state array
+        marks = _marks;
+
+        // Emit event when marks are added
+        emit MarksAdded(_marks);
+    }
+
+    // Function to get the marks stored in the array
+    function getMarks() public view returns (uint[] memory) {
+        return marks;
+    }
+
+    // Function to calculate the sum of all marks in the array
+    function calculateSum() public view returns (uint) {
+        uint sum = 0;
+        
+        // Loop through the marks array and calculate the sum
+        for (uint i = 0; i < marks.length; i++) {
+            sum += marks[i];
+        }
+        
+        return sum;
+    }
+}

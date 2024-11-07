@@ -1,0 +1,48 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract EmployeeDetails {
+
+    // Define the structure to hold Employee details
+    struct Employee {
+        uint id;
+        string name;
+        uint salary;
+        uint joiningDate; // Timestamp of the joining date
+    }
+
+    // Declare a dynamic array to store Employee details
+    Employee[] public employees;
+
+    // Event to emit when a new employee is added
+    event EmployeeAdded(uint id, string name, uint salary, uint joiningDate);
+
+    // Function to add a new employee
+    function addEmployee(uint _id, string memory _name, uint _salary, uint _joiningDate) public {
+        // Create a new employee struct
+        Employee memory newEmployee = Employee({
+            id: _id,
+            name: _name,
+            salary: _salary,
+            joiningDate: _joiningDate
+        });
+
+        // Add the new employee to the array
+        employees.push(newEmployee);
+
+        // Emit the EmployeeAdded event
+        emit EmployeeAdded(_id, _name, _salary, _joiningDate);
+    }
+
+    // Function to get employee details by their index in the array
+    function getEmployee(uint index) public view returns (uint, string memory, uint, uint) {
+        require(index < employees.length, "Employee not found.");
+        Employee memory employee = employees[index];
+        return (employee.id, employee.name, employee.salary, employee.joiningDate);
+    }
+
+    // Function to get total number of employees
+    function getTotalEmployees() public view returns (uint) {
+        return employees.length;
+    }
+}

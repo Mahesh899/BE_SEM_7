@@ -1,0 +1,70 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+// Define a structure to represent each job
+struct Job {
+    int id;         // Job ID
+    int deadline;   // Deadline of the job
+    int profit;     // Profit of the job
+};
+
+// Comparator function to sort jobs based on profit in descending order
+bool compare(Job a, Job b) {
+    return a.profit > b.profit;  // Sort by profit in decreasing order
+}
+
+// Function to perform Job Sequencing with Deadlines using Greedy Method
+void jobSequencing(Job jobs[], int n) {
+    // Step 1: Sort jobs in decreasing order of profit
+    sort(jobs, jobs + n, compare);
+    
+    // Step 2: Create an array to keep track of available time slots
+    int result[n];  // This will store the job IDs in the sequence
+    bool slot[n];   // This will indicate whether a time slot is occupied
+    
+    // Initialize all slots as empty (false)
+    fill(slot, slot + n, false);
+    
+    // Step 3: Process jobs one by one
+    for (int i = 0; i < n; i++) {
+        // Find a slot for this job (starting from the latest possible slot)
+        for (int j = min(n, jobs[i].deadline) - 1; j >= 0; j--) {
+            if (!slot[j]) {
+                // If slot is available, schedule the job in that slot
+                result[j] = jobs[i].id;
+                slot[j] = true;  // Mark the slot as occupied
+                break;
+            }
+        }
+    }
+
+    // Step 4: Print the job sequence
+    cout << "Job sequence (Job ID's): ";
+    for (int i = 0; i < n; i++) {
+        if (slot[i]) {
+            cout << result[i] << " ";
+        }
+    }
+    cout << endl;
+}
+
+int main() {
+    int n;
+    cout << "Enter number of jobs: ";
+    cin >> n;
+    
+    // Create an array of jobs
+    Job jobs[n];
+    
+    cout << "Enter job details (ID, Deadline, Profit):\n";
+    for (int i = 0; i < n; i++) {
+        cin >> jobs[i].id >> jobs[i].deadline >> jobs[i].profit;
+    }
+    
+    // Perform Job Sequencing
+    jobSequencing(jobs, n);
+    
+    return 0;
+}
